@@ -221,6 +221,10 @@ HTML;
 
     protected function javaScriptAssets($options)
     {
+        // Setup defer script loading if requested
+        $defer = isset($options['defer']) && $options['defer'] ? 'defer' : null;
+        unset($options['defer']);
+        
         $jsonEncodedOptions = $options ? json_encode($options) : '';
 
         $assetsUrl = config('livewire.asset_url') ?: rtrim($options['asset_url'] ?? '', '/');
@@ -288,7 +292,7 @@ HTML;
         // because it will be minified in production.
         return <<<HTML
 {$assetWarning}
-<script src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false" {$nonce}></script>
+<script src="{$fullAssetPath}" data-turbo-eval="false" data-turbolinks-eval="false" {$defer} {$nonce}></script>
 <script data-turbo-eval="false" data-turbolinks-eval="false" {$nonce}>
     {$windowLivewireCheck}
 
